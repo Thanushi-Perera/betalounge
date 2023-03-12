@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 import { getEmployee } from "../controllers/employee";
+
+import { deleteEmployee } from "../controllers/employee";
 
 export default function ViewEmployee() {
   const employeeTypes = [
@@ -26,19 +30,58 @@ export default function ViewEmployee() {
     setSelectedType(selectedOption.value);
   };
 
+  function deleteHandler(id) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value === true) {
+        deleteEmployee(id).then((res) => {
+          if (res) {
+            Swal.fire({
+              title: "Success!",
+              text: "Your file has been deleted",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500,
+            }).then(() => {
+              window.location.reload();
+            });
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: "Something went wrong",
+              icon: "error",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        });
+      }
+    });
+  }
+
   return (
     <>
-      <h1 className="fs-1">People</h1>
-      <div>
+      <h1 className="fs-1 mb-3">People</h1>
+      <div className="d-flex justify-content-end mb-5 p-3">
         <Select
           options={employeeTypes}
           value={selectedType}
           onChange={handleTypeChange}
           placeholder="Select employee type"
+          className="p-2"
         />
-        <button type="button" class="btn btn-primary">
-          Add People
-        </button>
+        <Link to={"/Add"}>
+          <button type="button" className="btn btn-primary p-2">
+            Add People
+          </button>
+        </Link>
       </div>
       <table className="table align-middle mb-0 bg-white">
         <thead class="bg-light">
@@ -62,12 +105,21 @@ export default function ViewEmployee() {
                 <td>{value.EmployeeType}</td>
                 <td>{value.Experience}</td>
                 <td>
-                  <button type="button" class="btn btn-link btn-sm btn-rounded">
-                    Edit
-                  </button>
+                  <Link to={"/update/" + value._id}>
+                    <button
+                      type="button"
+                      class="btn btn-link btn-sm btn-rounded"
+                    >
+                      Edit
+                    </button>
+                  </Link>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-link btn-sm btn-rounded">
+                  <button
+                    type="button"
+                    class="btn btn-link btn-sm btn-rounded"
+                    onClick={() => deleteHandler(value._id)}
+                  >
                     Delete
                   </button>
                 </td>
