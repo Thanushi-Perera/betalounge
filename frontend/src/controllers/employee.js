@@ -23,10 +23,14 @@ export const deleteEmployee = async (id) => {
   return data;
 };
 export const updateEmployee = async (details) => {
+  console.log("fControl");
+  console.log(details);
+
   const { data } = await axios.post(
     baseURL + "/employee/updateEmployee/",
     details
   );
+  console.log(data);
   return data;
 };
 

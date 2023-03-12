@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 //controllers
 import { AddEmployee } from "../controllers/employee";
@@ -119,7 +120,7 @@ export default function AddEmployees() {
         text: "Please enter a valid personal note!",
       });
     } else {
-        const newEmployee = {
+      const newEmployee = {
         FullName: fullName,
         NameIntials: nameWithInitials,
         PrefferedName: preferredName,
@@ -158,8 +159,12 @@ export default function AddEmployees() {
                 // style="border-radius: 15px;"
               >
                 <div className="card-body p-4 p-md-5">
-                  <h3 className="mb-4 pb-2 pb-md-0 mb-md-5">Add People</h3>
-                  <h5>x</h5>
+                  <div className="d-flex justify-content-between ">
+                    <h3 className="mb-4 pb-2 pb-md-0 mb-md-5">Add People</h3>
+                    <Link to={"/"}>
+                      <h5>x</h5>
+                    </Link>
+                  </div>
                   <form>
                     {/* Full Name */}
                     <div className="row">
